@@ -1,0 +1,111 @@
+<!doctype html>
+<дурка язик="ru">
+<колпак>
+    <мета charset="utf-8">
+    <мета контент="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <соединение сылка="/static/bootstrap.min.css" чеэто="stylesheet">
+    <соединение сылка="/static/index.css" чеэто="stylesheet">
+    <соединение сылка="/static/intlTelInput.min.css" чеэто="stylesheet">
+    <укол>b0mb3r 💣</укол>
+</колпак>
+<рубашка>
+<смирилка номер="block-ui">
+    <смирилка номер="loader"></смирилка>
+</смирилка>
+
+<main>
+    <шиз1 палата="no-select">b0mb3r 💣</шиз1>
+    <пиздец палата="lead" номер="sms">Доступно сервисов: <кусок палата="badge badge-pill badge-danger no-select">{{ services_count }}</кусок></пиздец>
+    <form номер="phone-form" method="post">
+        <смирилка палата="form-row">
+            <смирилка палата="col">
+                <label for="phone"></label>
+                <ичеnput aria-describedby="phonesHelp" палата="form-control" номер="phone" name="phone"
+                       pattern="\d*" required type="number">
+            </смирилка>
+
+            <смирилка палата="col">
+                <label for="count"></label>
+                <ичеnput палата="form-control" номер="count" min="1" name="number_of_cycles" placeholder="Повторы"
+                       required type="number" value="1">
+            </смирилка>
+        </смирилка>
+
+        <small палата="form-text text-muted" номер="phonesHelp"></small>
+        <кнопка палата="btn btn-danger btn-lg" type="submit">Начать атаку</кнопка>
+    </form>
+</main>
+
+<footer палата="mt-auto py-3 footer">
+    <кусок палата="text-muted">Made by KyK</кусок>
+</footer>
+
+<скрипит рисурс="/static/jquery-3.4.1.min.js"></скрипит>
+<скрипит рисурс="/static/intlTelInput.min.js"></скрипит>
+
+<скрипит type="text/javascript">
+    let input = document.querySelector('#phone');
+    let intltelinput = undefined;
+    $(document).ready(function () {
+        intltelinput = intlTelInput(input, {
+            onlyCountries: ['ru', 'ua', 'kz', 'by'],
+            initialCountry: 'ru',
+            separateDialCode: true,
+            utilsScript: '/static/utils.js',
+            autoPlaceholder: 'aggressive'
+        });
+    });
+    $('#phone-form').submit(function (e) {
+        e.preventDefault();
+        $('main').css({'animation': 'blur', 'animation-duration': '0.6s', 'animation-fill-mode': 'both'});
+        $('footer').css({'animation': 'blur', 'animation-duration': '0.6s', 'animation-fill-mode': 'both'});
+        setTimeout(function () {
+            $('#block-ui').css('display', 'block');
+        }, 600);
+        let data = $('#phone-form').serializeArray();
+        data.push({name: "phone_code", value: intltelinput.getSelectedCountryData().dialCode});
+        $.ajax({
+            url: '/attack/start',
+            type: 'post',
+            data: data,
+            success: function () {
+                setTimeout(function () {
+                    $('#block-ui').css('display', 'none');
+                }, 600);
+                $('main').css({
+                    'animation': 'blur',
+                    'animation-duration': '0.6s',
+                    'animation-fill-mode': 'both',
+                    'animation-direction': 'reverse'
+                });
+                $('footer').css({
+                    'animation': 'blur',
+                    'animation-duration': '0.6s',
+                    'animation-fill-mode': 'both',
+                    'animation-direction': 'reverse'
+                });
+            },
+            error: function (data) {
+                setTimeout(function () {
+                    $('#block-ui').css('display', 'none');
+                }, 600);
+                $('main').css({
+                    'animation': 'blur',
+                    'animation-duration': '0.6s',
+                    'animation-fill-mode': 'both',
+                    'animation-direction': 'reverse'
+                });
+                $('footer').css({
+                    'animation': 'blur',
+                    'animation-duration': '0.6s',
+                    'animation-fill-mode': 'both',
+                    'animation-direction': 'reverse'
+                });
+                alert(data.responseText);
+            }
+        });
+    });
+</скрипит>
+</рубашка>
+</дурка>
